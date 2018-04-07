@@ -91,3 +91,21 @@ and needs to be delivered fast. It will become unwieldy if the project grows.
   - establishing identity across software systems (could use SSN or telephone number but there are always edge cases)
 
 #### Value Objects
+
+- certain objects represent attributes of entities and are not defined by an identity
+- this could be something like an address or a color
+- we don't care which instance of a value object we have because only its attributes are important
+- many entities could share the same instance (it should be immutable) or each could have a copy (like database denormalization)
+
+#### Services
+
+- some things are better represented as processes rather than objects
+- these services are stateless unlike objects
+- don't confuse these with infrastructure services, we are talking about services that deal with purely domain logic
+- can be used to prevent leakage of domain logic into application layer. instead of doing lots of coordination of domain objects in application layer, which could represent domain logic, put that logic in a service and have the application layer use the service
+
+#### Modules (a.k.a packages)
+
+- keep all code implementing a single conceptual object in the same module
+  - not exactly sure what this means - is a domain object a "single conceptual object" or is the domain logic along with the technical implementation such as the persistence/database logic part of that "conceptual object"
+- use packaging to separate domain layer from other code
