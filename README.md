@@ -109,3 +109,30 @@ and needs to be delivered fast. It will become unwieldy if the project grows.
 - keep all code implementing a single conceptual object in the same module
   - not exactly sure what this means - is a domain object a "single conceptual object" or is the domain logic along with the technical implementation such as the persistence/database logic part of that "conceptual object"
 - use packaging to separate domain layer from other code
+
+### Chapter 6: The Life Cycle of a Domain Object
+
+- how do we manage the creation/instantiation of objects, the persistence of objects, modification of objects, etc
+- *Aggregates* establish clear boundaries
+- *Factories* create and reconstitute (?) complex objects and aggregates
+- *Repositories* manage finding and retrieving persistent objects
+
+#### Aggregates
+
+- groupings of associated objects/entities
+- have an *aggregate root* which is the root entity and the only entity that objects outside the aggregate can hold a reference to
+- invariants enforced within an aggregate within each transaction
+- invariants spanning multiple aggregates can be resolved/enforced asynchronously
+- the root entity is responsible for checking invariants
+- root object can share its internal entities with other objects, but those other objects aren't allowed to store a reference to that internal object
+- root object controls all access to the internals and is responsible for enforcing all invariants
+- Example: Purchase Order Integrity
+  - A purchase order contains line items which contain parts
+  - A purchase order contains an "approved limit" and it needs to ensure that the sum of the prices of its line items do not exceed this
+  - We need to make sure that we "lock" the root item, the PO, or else it could be in an invalid state
+  - Parts will belong to many POs potentially, so there is high contention
+  - We can accept some inconsistency caused by parts changing prices in order to increase efficiency (we don't want to lock every active PO because someone is changing the price of one part)
+  - We can have some other solution to deal with how changing part prices affect existing POs. Archived POs obviously won't change, but for existing POs, maybe users have to update/exempt their POs from the changes 
+
+#### Factories
+
