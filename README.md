@@ -136,3 +136,22 @@ and needs to be delivered fast. It will become unwieldy if the project grows.
 
 #### Factories
 
+- responsible for the creation of objects/aggregates
+- an entity should not be responsible for knowing how to create itself
+- the factory can contain the logic required to build a complex object and make sure its invariants are met
+- can either be a method on an existing object or a standalone object
+
+#### Repositories
+
+- design element for "reconstituting" an object
+- sort of like a factor because they instantiate a new object, but to the domain model, that object is a conceptual entity that already existed
+- is a way to access objects without traversing relationships
+- should only be used to provide access to the aggregate root
+- one big benefit: easily mocked for testing
+- can delegate object creation/instantiation to a factory after querying the data from the persistence source
+
+- when using a relational database, keep the mapping between the schema and object domain simple
+- a row should correspond to an object and a foreign key should translate to a reference to an entity
+- you can consider separating the database schema and the object model and maintain a more complex mapping at the benefit of not tightly coupling DB schema with object structure, but this is difficult to do right, so proceed with caution
+
+### Chapter 7: Using the Language: An Extended Example
